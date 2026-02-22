@@ -51,7 +51,8 @@ def run_experiment(device: str = "cpu") -> dict:
         dict with keys: task, model, device, course_examples, edge_cases, ablation, benchmark.
 
     Note:
-        Requires soundfile and an internet connection to download the audio files.
+        Requires soundfile and librosa (both declared in project dependencies) plus
+        an internet connection to download audio files.
     """
     model_name = _select_model(device)
     pipe = load_pipeline(model=model_name, device=device)

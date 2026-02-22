@@ -31,6 +31,10 @@ dependencies = [
     # NLP utilities
     "sentencepiece>=0.2.0",
     "protobuf>=5.28.0",
+
+    # Audio backends (required by ASR pipeline)
+    "soundfile>=0.12.0",
+    "librosa>=0.10.0",
     
     # Data and visualization
     "numpy>=2.2.1",
