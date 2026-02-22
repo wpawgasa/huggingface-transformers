@@ -2,6 +2,9 @@
 .claude/
 CLAUDE.md
 
+# ── DevContainer ──────────────────────────────────────────────────────────────
+.devcontainer/
+
 # ── Large data / model artifacts ──────────────────────────────────────────────
 models/
 datasets/
