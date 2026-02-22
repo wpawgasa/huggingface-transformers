@@ -1,0 +1,46 @@
+FROM nvidia/cuda:12.6.2-devel-ubuntu24.04
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+# Install system dependencies for HuggingFace Transformers
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    # Build essentials
+    build-essential \
+    cmake \
+    # Utilities
+    ca-certificates \
+    git \
+    wget \
+    curl \
+    # Python build dependencies
+    libssl-dev \
+    zlib1g-dev \
+    libbz2-dev \
+    libreadline-dev \
+    libsqlite3-dev \
+    libffi-dev \
+    liblzma-dev \
+    # Python runtime
+    python3.12 \
+    python3.12-dev \
+    python3-pip \
+    python-is-python3 \
+    # Audio processing (required by many HF models)
+    libsndfile1 \
+    ffmpeg \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install uv for fast Python package management
+# Note: git-lfs is NOT required for Hugging Face Hub usage with huggingface_hub >= 0.32.0
+# The library uses Xet storage backend and handles downloads automatically
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /usr/local/bin/
+
+# Set environment variables for Hugging Face Hub optimizations
+ENV HF_HUB_ENABLE_HF_TRANSFER=1
+ENV CUDA_HOME=/usr/local/cuda
+ENV PATH=${CUDA_HOME}/bin:${PATH}
+ENV LD_LIBRARY_PATH=${CUDA_HOME}/lib64:${LD_LIBRARY_PATH}
+
+# Set working directory
+WORKDIR /workspace

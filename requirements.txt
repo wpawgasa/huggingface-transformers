@@ -1,0 +1,13 @@
+numpy
+pandas
+matplotlib
+seaborn
+thop
+wandb
+tensorboard
+transformers[torch]
+sentencepiece
+datasets
+opencv-python==4.8.0.74
+pillow
+huggingface_hub[hf_transfer]

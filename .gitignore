@@ -1,0 +1,78 @@
+# ── Claude Code ───────────────────────────────────────────────────────────────
+.claude/
+CLAUDE.md
+
+# ── Large data / model artifacts ──────────────────────────────────────────────
+models/
+datasets/
+results/
+
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+wheels/
+
+# ── Virtual environments ───────────────────────────────────────────────────────
+.venv/
+venv/
+env/
+.env/
+
+# ── uv ────────────────────────────────────────────────────────────────────────
+.uv/
+
+# ── Jupyter ───────────────────────────────────────────────────────────────────
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# ── Hugging Face cache ────────────────────────────────────────────────────────
+.cache/
+.huggingface/
+
+# ── Experiment / ML outputs ───────────────────────────────────────────────────
+wandb/
+runs/
+lightning_logs/
+mlruns/
+*.ckpt
+*.pt
+*.pth
+*.safetensors
+*.onnx
+*.bin
+
+# ── Test & coverage ───────────────────────────────────────────────────────────
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# ── Type checking ─────────────────────────────────────────────────────────────
+.mypy_cache/
+.ruff_cache/
+
+# ── Environment & secrets ─────────────────────────────────────────────────────
+.env
+.env.*
+*.pem
+*.key
+secrets.yaml
+secrets.json
+
+# ── OS ────────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ── IDE ───────────────────────────────────────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
