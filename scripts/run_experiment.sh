@@ -25,15 +25,6 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-# --- Detect GPU ---
-if command -v nvidia-smi &>/dev/null && nvidia-smi &>/dev/null; then
-    DEVICE="cuda"
-    echo "[run_experiment.sh] GPU detected — using CUDA"
-else
-    DEVICE="cpu"
-    echo "[run_experiment.sh] No GPU detected — using CPU"
-fi
-
 # --- Install dependencies ---
 echo "[run_experiment.sh] Installing dependencies..."
 if command -v uv &>/dev/null; then
@@ -46,9 +37,9 @@ fi
 mkdir -p results
 
 # --- Run experiments ---
-echo "[run_experiment.sh] Starting experiments (device=$DEVICE, tasks=$TASKS)"
+echo "[run_experiment.sh] Starting experiments (device=auto, tasks=$TASKS)"
 python -m src.experiment_runner \
-    --device "$DEVICE" \
+    --device auto \
     --tasks "$TASKS" \
     --output "$OUTPUT" \
     --benchmark-output "$BENCHMARK_OUTPUT"
