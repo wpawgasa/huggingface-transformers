@@ -48,6 +48,9 @@ dependencies = [
     "tensorboard>=2.18.0",
     "wandb>=0.19.1",
     
+    # Environment
+    "python-dotenv>=1.0.0",
+
     # Utilities
     "tqdm>=4.67.0",
     "scikit-learn>=1.6.0",
