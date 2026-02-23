@@ -159,7 +159,7 @@ class TestRunTasks:
             raise RuntimeError("Model download failed")
 
         with patch.dict(TASK_REGISTRY, {"text-classification": failing_fn}):
-            result = run_tasks(
+            result, failures = run_tasks(
                 tasks=["text-classification"],
                 device="cpu",
                 output_path=output_path,
@@ -167,6 +167,7 @@ class TestRunTasks:
             )
 
         assert "error" in result["text-classification"]
+        assert failures == 1
 
     def test_creates_output_directory(self, tmp_path):
         output_path = str(tmp_path / "subdir" / "results.json")
@@ -263,6 +264,31 @@ class TestMain:
             )
 
         assert exit_code == 0
+
+    def test_failed_task_returns_exit_code_1(self, tmp_path):
+        output_path = str(tmp_path / "results.json")
+        benchmark_path = str(tmp_path / "benchmarks.csv")
+
+        def failing_fn(**kwargs):
+            raise RuntimeError("boom")
+
+        with (
+            patch.dict(TASK_REGISTRY, {"text-classification": failing_fn}),
+            patch("src.experiment_runner.torch") as mock_torch,
+        ):
+            mock_torch.cuda.is_available.return_value = False
+            exit_code = main(
+                [
+                    "--tasks",
+                    "text-classification",
+                    "--output",
+                    output_path,
+                    "--benchmark-output",
+                    benchmark_path,
+                ]
+            )
+
+        assert exit_code == 1
 
     def test_task_registry_has_expected_tasks(self):
         expected = {

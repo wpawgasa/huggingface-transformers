@@ -80,7 +80,7 @@ def run_tasks(
     device: str,
     output_path: str,
     benchmark_path: str,
-) -> dict:
+) -> tuple[dict, int]:
     """Run the requested pipeline experiments and persist results.
 
     Args:
@@ -90,7 +90,7 @@ def run_tasks(
         benchmark_path: Path to write the CSV benchmark file.
 
     Returns:
-        Dict mapping task name → result dict.
+        Tuple of (results dict mapping task name → result dict, failure count).
     """
     os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
 
@@ -99,6 +99,7 @@ def run_tasks(
 
     all_results: dict = {}
     benchmark_rows: list[dict] = []
+    failures = 0
 
     for task_name in tasks:
         print(f"{'=' * 60}")
@@ -127,6 +128,7 @@ def run_tasks(
         except Exception as exc:  # noqa: BLE001
             print(f"  FAIL {task_name} failed: {exc}\n", file=sys.stderr)
             all_results[task_name] = {"error": str(exc)}
+            failures += 1
 
     # Write JSON results
     with open(output_path, "w") as f:
@@ -150,7 +152,7 @@ def run_tasks(
             writer.writerows(benchmark_rows)
         print(f"Benchmarks saved to: {benchmark_path}")
 
-    return all_results
+    return all_results, failures
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -209,13 +211,13 @@ def main(argv: list[str] | None = None) -> int:
         print("Error: No tasks specified.", file=sys.stderr)
         return 1
 
-    run_tasks(
+    _, failures = run_tasks(
         tasks=tasks,
         device=device,
         output_path=args.output,
         benchmark_path=args.benchmark_output,
     )
-    return 0
+    return 1 if failures else 0
 
 
 if __name__ == "__main__":
