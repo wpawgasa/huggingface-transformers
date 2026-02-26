@@ -2,7 +2,7 @@
 
 from unittest.mock import MagicMock, call
 
-from src.benchmarks import BenchmarkResult, benchmark_pipeline
+from src.pipeline_exploration.benchmarks import BenchmarkResult, benchmark_pipeline
 
 
 class TestBenchmarkResult:

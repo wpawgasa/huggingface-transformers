@@ -11,9 +11,9 @@ Course reference: HuggingFace LLM Course Chapter 1.3
 
 from transformers import pipeline as hf_pipeline
 
-from src.benchmarks import BenchmarkResult, benchmark_pipeline
-from src.data import NER_INPUTS
-from src.evaluate import validate_output
+from src.pipeline_exploration.benchmarks import BenchmarkResult, benchmark_pipeline
+from src.pipeline_exploration.data import NER_INPUTS
+from src.pipeline_exploration.evaluate import validate_output
 
 TASK = "ner"
 DEFAULT_MODEL = "dbmdz/bert-large-cased-finetuned-conll03-english"

@@ -2,10 +2,10 @@
 
 Usage:
     # Run all 10 tasks (auto-detect GPU)
-    python -m src.experiment_runner --device auto --tasks all --output results/outputs.json
+    python -m src.pipeline_exploration.experiment_runner --device auto --tasks all --output results/outputs.json
 
     # Run a subset
-    python -m src.experiment_runner --device cpu \\
+    python -m src.pipeline_exploration.experiment_runner --device cpu \\
         --tasks text-classification,zero-shot,fill-mask \\
         --output results/text_only.json
 """
@@ -19,7 +19,7 @@ from collections.abc import Callable
 
 import torch
 
-from src.pipelines import (
+from src.pipeline_exploration.pipelines import (
     fill_mask,
     image_classification,
     ner,

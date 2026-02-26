@@ -2,15 +2,15 @@
 
 from unittest.mock import MagicMock, patch
 
-from src.pipelines.text_generation import DEFAULT_MODEL, TASK, run_experiment
+from src.pipeline_exploration.pipelines.text_generation import DEFAULT_MODEL, TASK, run_experiment
 
 
 def _gen_output(text="In this course, we will teach you how to build a model."):
     return [{"generated_text": text}]
 
 
-@patch("src.pipelines.text_generation.benchmark_pipeline")
-@patch("src.pipelines.text_generation.hf_pipeline")
+@patch("src.pipeline_exploration.pipelines.text_generation.benchmark_pipeline")
+@patch("src.pipeline_exploration.pipelines.text_generation.hf_pipeline")
 class TestRunExperiment:
     def _setup(self, mock_hf, mock_bench):
         mock_pipe = MagicMock()

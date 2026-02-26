@@ -2,7 +2,7 @@
 
 from unittest.mock import MagicMock, patch
 
-from src.pipelines.zero_shot import DEFAULT_MODEL, TASK, run_experiment
+from src.pipeline_exploration.pipelines.zero_shot import DEFAULT_MODEL, TASK, run_experiment
 
 
 def _make_zero_shot_output(seq="test", labels=None, scores=None):
@@ -11,8 +11,8 @@ def _make_zero_shot_output(seq="test", labels=None, scores=None):
     return {"sequence": seq, "labels": labels, "scores": scores}
 
 
-@patch("src.pipelines.zero_shot.benchmark_pipeline")
-@patch("src.pipelines.zero_shot.hf_pipeline")
+@patch("src.pipeline_exploration.pipelines.zero_shot.benchmark_pipeline")
+@patch("src.pipeline_exploration.pipelines.zero_shot.hf_pipeline")
 class TestRunExperiment:
     def _setup_mocks(self, mock_hf, mock_bench, n_labels=3):
         labels = [

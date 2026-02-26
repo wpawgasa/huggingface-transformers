@@ -2,7 +2,7 @@
 
 from unittest.mock import MagicMock, patch
 
-from src.pipelines.text_classification import DEFAULT_MODEL, TASK, load_pipeline, run_experiment
+from src.pipeline_exploration.pipelines.text_classification import DEFAULT_MODEL, TASK, load_pipeline, run_experiment
 
 
 def _make_mock_pipe(outputs):
@@ -12,8 +12,8 @@ def _make_mock_pipe(outputs):
     return mock
 
 
-@patch("src.pipelines.text_classification.benchmark_pipeline")
-@patch("src.pipelines.text_classification.hf_pipeline")
+@patch("src.pipeline_exploration.pipelines.text_classification.benchmark_pipeline")
+@patch("src.pipeline_exploration.pipelines.text_classification.hf_pipeline")
 class TestRunExperiment:
     def _mock_outputs(self):
         return [{"label": "POSITIVE", "score": 0.9598}]
@@ -86,7 +86,7 @@ class TestRunExperiment:
         assert kwargs.get("device") == "cuda"
 
 
-@patch("src.pipelines.text_classification.hf_pipeline")
+@patch("src.pipeline_exploration.pipelines.text_classification.hf_pipeline")
 class TestLoadPipeline:
     def test_returns_pipeline(self, mock_hf):
         mock_pipe = MagicMock()

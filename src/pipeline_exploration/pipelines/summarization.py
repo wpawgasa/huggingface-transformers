@@ -11,9 +11,9 @@ Course reference: HuggingFace LLM Course Chapter 1.3
 
 from transformers import pipeline as hf_pipeline
 
-from src.benchmarks import BenchmarkResult, benchmark_pipeline
-from src.data import SUMMARIZATION_INPUTS
-from src.evaluate import validate_output
+from src.pipeline_exploration.benchmarks import BenchmarkResult, benchmark_pipeline
+from src.pipeline_exploration.data import SUMMARIZATION_INPUTS
+from src.pipeline_exploration.evaluate import validate_output
 
 TASK = "summarization"
 DEFAULT_MODEL = "sshleifer/distilbart-cnn-12-6"

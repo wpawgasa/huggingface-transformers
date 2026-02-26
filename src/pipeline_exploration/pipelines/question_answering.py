@@ -1,7 +1,7 @@
-"""Experiment 1: Text Classification (Sentiment Analysis).
+"""Experiment 6: Question Answering (Extractive QA).
 
-Pipeline: text-classification
-Default model: distilbert-base-uncased-finetuned-sst-2-english
+Pipeline: question-answering
+Default model: distilbert-base-cased-distilled-squad
 Architecture: Encoder-only (DistilBERT)
 
 Course reference: HuggingFace LLM Course Chapter 1.3
@@ -9,21 +9,21 @@ Course reference: HuggingFace LLM Course Chapter 1.3
 
 from transformers import pipeline as hf_pipeline
 
-from src.benchmarks import BenchmarkResult, benchmark_pipeline
-from src.data import TEXT_CLASSIFICATION_INPUTS
-from src.evaluate import validate_output
+from src.pipeline_exploration.benchmarks import BenchmarkResult, benchmark_pipeline
+from src.pipeline_exploration.data import QA_INPUTS
+from src.pipeline_exploration.evaluate import validate_output
 
-TASK = "text-classification"
-DEFAULT_MODEL = "distilbert-base-uncased-finetuned-sst-2-english"
+TASK = "question-answering"
+DEFAULT_MODEL = "distilbert-base-cased-distilled-squad"
 
 
 def load_pipeline(model: str = DEFAULT_MODEL, device: str = "cpu"):
-    """Load the text-classification pipeline."""
+    """Load the question-answering pipeline."""
     return hf_pipeline(TASK, model=model, device=device)
 
 
 def run_experiment(device: str = "cpu") -> dict:
-    """Run the full text-classification experiment.
+    """Run the full question-answering experiment.
 
     Steps:
         1. Load pipeline with default model.
@@ -46,30 +46,27 @@ def run_experiment(device: str = "cpu") -> dict:
     }
 
     # --- Course examples ---
-    course_inputs = TEXT_CLASSIFICATION_INPUTS["course_examples"]
-    course_outputs = pipe(course_inputs)
-    for output in course_outputs:
-        validate_output(TASK, output)
+    ce = QA_INPUTS["course_examples"]
+    course_output = pipe(question=ce["question"], context=ce["context"])
+    validate_output(TASK, course_output)
     results["course_examples"] = {
-        "inputs": course_inputs,
-        "outputs": course_outputs,
+        "input": ce,
+        "output": course_output,
     }
 
     # --- Edge cases ---
     edge_results = {}
-    for name, text in TEXT_CLASSIFICATION_INPUTS["edge_cases"].items():
-        if not text:  # skip empty string (model may error on empty input)
-            edge_results[name] = {"input": text, "output": None, "skipped": True}
-            continue
-        output = pipe(text)[0]
+    for name, item in QA_INPUTS["edge_cases"].items():
+        output = pipe(question=item["question"], context=item["context"])
         validate_output(TASK, output)
-        edge_results[name] = {"input": text, "output": output}
+        edge_results[name] = {"input": item, "output": output}
     results["edge_cases"] = edge_results
 
-    # --- Benchmark ---
+    # --- Benchmark (QA pipeline accepts dict input) ---
+    bench_input = {"question": ce["question"], "context": ce["context"]}
     bm: BenchmarkResult = benchmark_pipeline(
         pipe_factory=lambda: load_pipeline(device=device),
-        inputs=course_inputs[0],
+        inputs=bench_input,
         task_name=TASK,
         model_name=DEFAULT_MODEL,
     )

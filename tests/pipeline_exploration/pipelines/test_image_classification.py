@@ -2,7 +2,7 @@
 
 from unittest.mock import MagicMock, patch
 
-from src.pipelines.image_classification import DEFAULT_MODEL, TASK, run_experiment
+from src.pipeline_exploration.pipelines.image_classification import DEFAULT_MODEL, TASK, run_experiment
 
 
 def _img_cls_output():
@@ -12,8 +12,8 @@ def _img_cls_output():
     ]
 
 
-@patch("src.pipelines.image_classification.benchmark_pipeline")
-@patch("src.pipelines.image_classification.hf_pipeline")
+@patch("src.pipeline_exploration.pipelines.image_classification.benchmark_pipeline")
+@patch("src.pipeline_exploration.pipelines.image_classification.hf_pipeline")
 class TestRunExperiment:
     def _setup(self, mock_hf, mock_bench):
         mock_pipe = MagicMock()

@@ -2,7 +2,7 @@
 
 from unittest.mock import MagicMock, patch
 
-from src.pipelines.speech_recognition import (
+from src.pipeline_exploration.pipelines.speech_recognition import (
     CPU_MODEL,
     GPU_MODEL,
     TASK,
@@ -30,7 +30,7 @@ class TestSelectModel:
         assert _select_model("cuda:1") == GPU_MODEL
 
 
-@patch("src.pipelines.speech_recognition.hf_pipeline")
+@patch("src.pipeline_exploration.pipelines.speech_recognition.hf_pipeline")
 class TestLoadPipeline:
     def test_default_uses_cpu_model(self, mock_hf):
         mock_hf.return_value = MagicMock()
@@ -46,8 +46,8 @@ class TestLoadPipeline:
         assert kwargs.get("model") == CPU_MODEL
 
 
-@patch("src.pipelines.speech_recognition.benchmark_pipeline")
-@patch("src.pipelines.speech_recognition.hf_pipeline")
+@patch("src.pipeline_exploration.pipelines.speech_recognition.benchmark_pipeline")
+@patch("src.pipeline_exploration.pipelines.speech_recognition.hf_pipeline")
 class TestRunExperiment:
     def _setup(self, mock_hf, mock_bench, device="cpu"):
         mock_pipe = MagicMock()

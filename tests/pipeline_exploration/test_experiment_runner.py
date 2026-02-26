@@ -4,7 +4,7 @@ import json
 import os
 from unittest.mock import MagicMock, patch
 
-from src.experiment_runner import (
+from src.pipeline_exploration.experiment_runner import (
     TASK_REGISTRY,
     build_parser,
     main,
@@ -24,12 +24,12 @@ class TestResolveDevice:
     def test_cuda_n_passthrough(self):
         assert resolve_device("cuda:1") == "cuda:1"
 
-    @patch("src.experiment_runner.torch")
+    @patch("src.pipeline_exploration.experiment_runner.torch")
     def test_auto_resolves_to_cuda_when_available(self, mock_torch):
         mock_torch.cuda.is_available.return_value = True
         assert resolve_device("auto") == "cuda"
 
-    @patch("src.experiment_runner.torch")
+    @patch("src.pipeline_exploration.experiment_runner.torch")
     def test_auto_resolves_to_cpu_when_no_gpu(self, mock_torch):
         mock_torch.cuda.is_available.return_value = False
         assert resolve_device("auto") == "cpu"
@@ -249,7 +249,7 @@ class TestMain:
 
         with (
             patch.dict(TASK_REGISTRY, {"text-classification": mock_fn}),
-            patch("src.experiment_runner.torch") as mock_torch,
+            patch("src.pipeline_exploration.experiment_runner.torch") as mock_torch,
         ):
             mock_torch.cuda.is_available.return_value = False
             exit_code = main(
@@ -274,7 +274,7 @@ class TestMain:
 
         with (
             patch.dict(TASK_REGISTRY, {"text-classification": failing_fn}),
-            patch("src.experiment_runner.torch") as mock_torch,
+            patch("src.pipeline_exploration.experiment_runner.torch") as mock_torch,
         ):
             mock_torch.cuda.is_available.return_value = False
             exit_code = main(
