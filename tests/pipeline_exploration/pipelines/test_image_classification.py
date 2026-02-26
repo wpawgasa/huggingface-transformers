@@ -2,7 +2,11 @@
 
 from unittest.mock import MagicMock, patch
 
-from src.pipeline_exploration.pipelines.image_classification import DEFAULT_MODEL, TASK, run_experiment
+from src.pipeline_exploration.pipelines.image_classification import (
+    DEFAULT_MODEL,
+    TASK,
+    run_experiment,
+)
 
 
 def _img_cls_output():

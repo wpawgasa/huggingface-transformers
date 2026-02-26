@@ -2,7 +2,12 @@
 
 from unittest.mock import MagicMock, patch
 
-from src.pipeline_exploration.pipelines.fill_mask import BERT_MODEL, DEFAULT_MODEL, TASK, run_experiment
+from src.pipeline_exploration.pipelines.fill_mask import (
+    BERT_MODEL,
+    DEFAULT_MODEL,
+    TASK,
+    run_experiment,
+)
 
 
 def _fill_output():

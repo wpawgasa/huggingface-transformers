@@ -2,7 +2,12 @@
 
 from unittest.mock import MagicMock, patch
 
-from src.pipeline_exploration.pipelines.text_classification import DEFAULT_MODEL, TASK, load_pipeline, run_experiment
+from src.pipeline_exploration.pipelines.text_classification import (
+    DEFAULT_MODEL,
+    TASK,
+    load_pipeline,
+    run_experiment,
+)
 
 
 def _make_mock_pipe(outputs):
