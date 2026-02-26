@@ -134,41 +134,41 @@ dependencies:
 
 ### 3.2 Project Structure
 
+This experiment lives inside the main repository under `src/architecture_deepdive/`:
+
 ```
-transformer_architecture_experiment/
-├── README.md                         # This document
-├── requirements.txt                  # Pinned dependencies
-├── config.yaml                       # All settings
-├── src/
-│   ├── __init__.py
-│   ├── experiment_runner.py          # Main orchestrator
-│   ├── probes/
-│   │   ├── __init__.py
-│   │   ├── p1_model_timeline.py      # Probe 1: Transformer history
-│   │   ├── p2_language_modeling.py   # Probe 2: Causal vs Masked LM
-│   │   ├── p3_transfer_learning.py   # Probe 3: Pretrained vs scratch
-│   │   ├── p4_model_anatomy.py       # Probe 4: Architecture inspection
-│   │   ├── p5_attention_viz.py       # Probe 5: Attention visualization
-│   │   └── p6_arch_comparison.py     # Probe 6: Encoder vs Decoder vs Enc-Dec
-│   ├── utils/
-│   │   ├── __init__.py
-│   │   ├── attention_tools.py        # Extract and visualize attention weights
-│   │   ├── model_inspector.py        # Count params, list layers, trace ops
-│   │   └── plotting.py              # Matplotlib/seaborn helpers
-│   └── data.py                       # Shared test sentences and inputs
-├── results/
-│   ├── figures/                      # Generated visualizations
-│   ├── outputs.json                  # Structured probe outputs
-│   └── comparison_report.md          # Final analysis
-└── scripts/
-    └── run_experiment.sh
+src/
+├── __init__.py                           # Top-level package
+├── pipeline_exploration/                 # Ch1.3 experiment (separate)
+└── architecture_deepdive/
+    ├── __init__.py
+    ├── experiment_runner.py              # Main orchestrator
+    ├── data.py                           # Shared test sentences and inputs
+    ├── probes/
+    │   ├── __init__.py
+    │   ├── p1_model_timeline.py          # Probe 1: Transformer history
+    │   ├── p2_language_modeling.py       # Probe 2: Causal vs Masked LM
+    │   ├── p3_transfer_learning.py       # Probe 3: Pretrained vs scratch
+    │   ├── p4_model_anatomy.py           # Probe 4: Architecture inspection
+    │   ├── p5_attention_viz.py           # Probe 5: Attention visualization
+    │   └── p6_arch_comparison.py         # Probe 6: Encoder vs Decoder vs Enc-Dec
+    └── utils/
+        ├── __init__.py
+        ├── attention_tools.py            # Extract and visualize attention weights
+        ├── model_inspector.py            # Count params, list layers, trace ops
+        └── plotting.py                   # Matplotlib/seaborn helpers
+
+results/                                  # Saved experiment outputs (gitignored)
+├── figures/                              # Generated visualizations
+├── outputs.json                          # Structured probe outputs
+└── comparison_report.md                  # Final analysis
 ```
 
 ---
 
 ## 4. Implementation Guide
 
-### 4.1 Shared Data & Utilities — `src/data.py`
+### 4.1 Shared Data & Utilities — `src/architecture_deepdive/data.py`
 
 ```python
 """
@@ -273,7 +273,7 @@ MODEL_REGISTRY = {
 }
 ```
 
-### 4.2 Utility: Model Inspector — `src/utils/model_inspector.py`
+### 4.2 Utility: Model Inspector — `src/architecture_deepdive/utils/model_inspector.py`
 
 ```python
 """
@@ -383,7 +383,7 @@ def format_param_count(n: int) -> str:
     return str(n)
 ```
 
-### 4.3 Utility: Attention Tools — `src/utils/attention_tools.py`
+### 4.3 Utility: Attention Tools — `src/architecture_deepdive/utils/attention_tools.py`
 
 ```python
 """
@@ -502,7 +502,7 @@ def compare_causal_vs_bidirectional_mask(seq_len: int) -> dict:
     }
 ```
 
-### 4.4 Utility: Plotting — `src/utils/plotting.py`
+### 4.4 Utility: Plotting — `src/architecture_deepdive/utils/plotting.py`
 
 ```python
 """
@@ -669,7 +669,7 @@ def plot_transfer_learning_comparison(
 
 ---
 
-### 4.5 Probe 1: Transformer History Timeline — `src/probes/p1_model_timeline.py`
+### 4.5 Probe 1: Transformer History Timeline — `src/architecture_deepdive/probes/p1_model_timeline.py`
 
 ```python
 """
@@ -839,7 +839,7 @@ def run_experiment() -> dict:
 
 ---
 
-### 4.6 Probe 2: Causal vs Masked Language Modeling — `src/probes/p2_language_modeling.py`
+### 4.6 Probe 2: Causal vs Masked Language Modeling — `src/architecture_deepdive/probes/p2_language_modeling.py`
 
 ```python
 """
@@ -859,7 +859,7 @@ from transformers import (
     AutoModelForMaskedLM,
     AutoTokenizer,
 )
-from src.data import LM_INPUTS
+from src.architecture_deepdive.data import LM_INPUTS
 
 
 def run_causal_lm_probe(model_name: str = "gpt2", device: str = "cpu") -> dict:
@@ -966,7 +966,7 @@ def run_experiment(device: str = "cpu") -> dict:
 
 ---
 
-### 4.7 Probe 3: Transfer Learning — `src/probes/p3_transfer_learning.py`
+### 4.7 Probe 3: Transfer Learning — `src/architecture_deepdive/probes/p3_transfer_learning.py`
 
 ```python
 """
@@ -987,7 +987,7 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, TensorDataset
 from transformers import AutoModel, AutoTokenizer, AutoConfig
-from src.data import TRANSFER_LEARNING_DATA
+from src.architecture_deepdive.data import TRANSFER_LEARNING_DATA
 
 
 class SimpleClassifier(nn.Module):
@@ -1142,7 +1142,7 @@ def run_experiment(device: str = "cpu") -> dict:
 
 ---
 
-### 4.8 Probe 4: Model Anatomy Inspector — `src/probes/p4_model_anatomy.py`
+### 4.8 Probe 4: Model Anatomy Inspector — `src/architecture_deepdive/probes/p4_model_anatomy.py`
 
 ```python
 """
@@ -1160,8 +1160,8 @@ This probe inspects one representative model from each family:
   - T5 (encoder-decoder)
 """
 
-from src.data import MODEL_REGISTRY
-from src.utils.model_inspector import inspect_model, format_param_count
+from src.architecture_deepdive.data import MODEL_REGISTRY
+from src.architecture_deepdive.utils.model_inspector import inspect_model, format_param_count
 
 
 def run_experiment(device: str = "cpu") -> dict:
@@ -1230,7 +1230,7 @@ def run_experiment(device: str = "cpu") -> dict:
 
 ---
 
-### 4.9 Probe 5: Attention Visualization — `src/probes/p5_attention_viz.py`
+### 4.9 Probe 5: Attention Visualization — `src/architecture_deepdive/probes/p5_attention_viz.py`
 
 ```python
 """
@@ -1250,13 +1250,13 @@ This probe extracts and visualizes real attention weights to verify
 these theoretical claims empirically.
 """
 
-from src.data import ATTENTION_SENTENCES
-from src.utils.attention_tools import (
+from src.architecture_deepdive.data import ATTENTION_SENTENCES
+from src.architecture_deepdive.utils.attention_tools import (
     extract_attention_weights,
     get_attention_to_token,
     compare_causal_vs_bidirectional_mask,
 )
-from src.utils.plotting import (
+from src.architecture_deepdive.utils.plotting import (
     plot_attention_matrix,
     plot_attention_mask_comparison,
 )
@@ -1369,7 +1369,7 @@ def run_experiment(device: str = "cpu") -> dict:
 
 ---
 
-### 4.10 Probe 6: Architecture Family Comparison — `src/probes/p6_arch_comparison.py`
+### 4.10 Probe 6: Architecture Family Comparison — `src/architecture_deepdive/probes/p6_arch_comparison.py`
 
 ```python
 """
@@ -1395,7 +1395,7 @@ from transformers import (
     AutoModelForMaskedLM,
     AutoModelForSeq2SeqLM,
 )
-from src.data import MODEL_REGISTRY
+from src.architecture_deepdive.data import MODEL_REGISTRY
 
 
 SHARED_INPUT = "The Transformer architecture was introduced in 2017."
@@ -1581,14 +1581,15 @@ def run_experiment(device: str = "cpu") -> dict:
 
 ---
 
-### 4.11 Main Orchestrator — `src/experiment_runner.py`
+### 4.11 Main Orchestrator — `src/architecture_deepdive/experiment_runner.py`
 
 ```python
 """
 Main experiment orchestrator for all 6 architecture probes.
 
 Usage:
-    python -m src.experiment_runner [--device cpu|cuda] [--probes all|p1,p2,...]
+    python -m src.architecture_deepdive.experiment_runner \
+        [--device cpu|cuda] [--probes all|p1,p2,...]
 """
 
 import argparse
@@ -1597,7 +1598,7 @@ import time
 import torch
 from pathlib import Path
 
-from src.probes import (
+from src.architecture_deepdive.probes import (
     p1_model_timeline,
     p2_language_modeling,
     p3_transfer_learning,
@@ -1711,7 +1712,7 @@ else
 fi
 
 # Run all probes
-python -m src.experiment_runner --device "$DEVICE" --probes all
+python -m src.architecture_deepdive.experiment_runner --device "$DEVICE" --probes all
 
 echo ""
 echo "📊 Results: results/outputs.json"
