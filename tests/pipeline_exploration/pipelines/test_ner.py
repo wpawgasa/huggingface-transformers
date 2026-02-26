@@ -2,7 +2,7 @@
 
 from unittest.mock import MagicMock, patch
 
-from src.pipelines.ner import DEFAULT_MODEL, TASK, run_experiment
+from src.pipeline_exploration.pipelines.ner import DEFAULT_MODEL, TASK, run_experiment
 
 
 def _ner_grouped_output():
@@ -20,8 +20,8 @@ def _ner_ungrouped_output():
     ]
 
 
-@patch("src.pipelines.ner.benchmark_pipeline")
-@patch("src.pipelines.ner.hf_pipeline")
+@patch("src.pipeline_exploration.pipelines.ner.benchmark_pipeline")
+@patch("src.pipeline_exploration.pipelines.ner.hf_pipeline")
 class TestRunExperiment:
     def _setup(self, mock_hf, mock_bench):
         mock_pipe = MagicMock()

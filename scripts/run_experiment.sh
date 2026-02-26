@@ -38,7 +38,7 @@ mkdir -p results
 
 # --- Run experiments ---
 echo "[run_experiment.sh] Starting experiments (device=auto, tasks=$TASKS)"
-python -m src.experiment_runner \
+python -m src.pipeline_exploration.experiment_runner \
     --device auto \
     --tasks "$TASKS" \
     --output "$OUTPUT" \

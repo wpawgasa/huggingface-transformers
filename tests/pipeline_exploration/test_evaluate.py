@@ -2,7 +2,7 @@
 
 import pytest
 
-from src.evaluate import validate_output
+from src.pipeline_exploration.evaluate import validate_output
 
 # ---------------------------------------------------------------------------
 # validate_output dispatcher

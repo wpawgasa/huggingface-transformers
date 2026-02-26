@@ -1,9 +1,11 @@
-"""HuggingFace Transformers Pipeline Experiments.
+"""HuggingFace Transformers Experiments.
 
-A systematic benchmark of all major pipeline() task types across
-text, vision, and audio modalities.
+A collection of hands-on experiments built on the HuggingFace Transformers library,
+covering pipeline benchmarks, model architecture analysis, and more.
 
-Reference: HuggingFace LLM Course — Chapter 1.3
+Experiments:
+  - src.pipeline_exploration: Pipeline task benchmarks (Ch1.3)
+  - src.architecture_deepdive: Transformer architecture deep dive (Ch1.4)
 """
 
 __version__ = "0.1.0"

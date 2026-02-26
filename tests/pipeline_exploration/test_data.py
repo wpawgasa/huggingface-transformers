@@ -1,6 +1,6 @@
 """Tests for src/data.py — verify all task input structures."""
 
-from src.data import (
+from src.pipeline_exploration.data import (
     FILL_MASK_INPUTS,
     IMAGE_CLASSIFICATION_INPUTS,
     NER_INPUTS,

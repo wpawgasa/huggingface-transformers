@@ -4,7 +4,7 @@ Each module implements one pipeline task from the HuggingFace LLM Course Chapter
 and exports a run_experiment(device) -> dict function.
 """
 
-from src.pipelines import (
+from src.pipeline_exploration.pipelines import (
     fill_mask,
     image_classification,
     ner,

@@ -1,25 +1,26 @@
-"""Tests for src/pipelines/image_classification.py."""
+"""Tests for src/pipelines/question_answering.py."""
 
 from unittest.mock import MagicMock, patch
 
-from src.pipelines.image_classification import DEFAULT_MODEL, TASK, run_experiment
+from src.pipeline_exploration.pipelines.question_answering import (
+    DEFAULT_MODEL,
+    TASK,
+    run_experiment,
+)
 
 
-def _img_cls_output():
-    return [
-        {"label": "Egyptian cat", "score": 0.9879},
-        {"label": "tabby, tabby cat", "score": 0.0049},
-    ]
+def _qa_output():
+    return {"answer": "Hugging Face", "score": 0.9714, "start": 35, "end": 47}
 
 
-@patch("src.pipelines.image_classification.benchmark_pipeline")
-@patch("src.pipelines.image_classification.hf_pipeline")
+@patch("src.pipeline_exploration.pipelines.question_answering.benchmark_pipeline")
+@patch("src.pipeline_exploration.pipelines.question_answering.hf_pipeline")
 class TestRunExperiment:
     def _setup(self, mock_hf, mock_bench):
         mock_pipe = MagicMock()
-        mock_pipe.return_value = _img_cls_output()
+        mock_pipe.return_value = _qa_output()
         mock_hf.return_value = mock_pipe
-        mock_bench.return_value = MagicMock(to_dict=lambda: {"warm_latency_ms": 150.0})
+        mock_bench.return_value = MagicMock(to_dict=lambda: {"warm_latency_ms": 75.0})
         return mock_pipe
 
     def test_returns_dict(self, mock_hf, mock_bench):
@@ -39,13 +40,7 @@ class TestRunExperiment:
         assert "course_examples" in result
         ce = result["course_examples"]
         assert "input" in ce
-        assert "outputs" in ce
-        assert "top_prediction" in ce
-
-    def test_top_prediction_is_dict(self, mock_hf, mock_bench):
-        self._setup(mock_hf, mock_bench)
-        result = run_experiment(device="cpu")
-        assert isinstance(result["course_examples"]["top_prediction"], dict)
+        assert "output" in ce
 
     def test_has_edge_cases(self, mock_hf, mock_bench):
         self._setup(mock_hf, mock_bench)
@@ -56,3 +51,12 @@ class TestRunExperiment:
         self._setup(mock_hf, mock_bench)
         result = run_experiment(device="cpu")
         assert "benchmark" in result
+
+    def test_pipe_called_with_question_and_context(self, mock_hf, mock_bench):
+        mock_pipe = self._setup(mock_hf, mock_bench)
+        run_experiment(device="cpu")
+        # The pipeline should be called with question= and context= kwargs
+        first_call = mock_pipe.call_args_list[0]
+        kwargs = first_call.kwargs
+        assert "question" in kwargs
+        assert "context" in kwargs
